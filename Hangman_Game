@@ -1,0 +1,54 @@
+import random
+word_list = open("word_list.txt","r+")
+words =[]
+
+for entry in word_list:
+    words += [entry]
+    
+choice = random.randrange(0,len(words))
+
+lives = 7
+
+letters = []
+display = []
+for letter in words[choice]:
+    letters += letter
+    display += "*"
+    
+letters.pop()
+display.pop()
+
+guessed = []
+while lives > 0:
+    changes = 0
+    displayed = "".join(display)
+    print("Please enter your next guess: {}\n".format(displayed))
+    guess = input()
+    while len(guess) > 1 or guess.isalpha() == False or guess in guessed:
+        if len(guess) > 1:
+            print("only one letter at a time")
+        elif guess.isalpha() == False:
+            print("letters only")
+        elif guess in guessed:
+            print("you have already guessed this letter")
+        print("Please enter your next guess: {}\n".format(displayed))
+        guess = input()
+    
+    position = 0
+    for entry in letters:
+        if guess == entry:
+            display[position] = letters[position]
+            position += 1
+            changes += 1
+        else:
+            position += 1
+            guessed += [guess]
+    if changes == 0:
+        lives -= 1
+        #print(lives)
+    if "*" not in display:
+        print("congratulations you win")
+        break
+        
+if lives == 0:
+    print(f"you lose")
